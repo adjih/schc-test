@@ -48,6 +48,18 @@ class schc_ruledb:
         if tag not in x:
             raise ValueError("ERROR: %s is not defined." % tag)
 
+    def is_one_of(self, x, tag, tag_list, ignore_case=False):
+        self.is_defined(x, tag)
+        tag_val = x[tag]
+        if ignore_case:
+            if not isinstance(tag_val, str):
+                raise ValueError("ERROR: %s %s is not a str." % (tag, tag_val))
+            tag_val = tag_val.upper()
+            tag_list = [t.upper() for t in tag_list]
+
+        if tag_val not in tag_list:
+            raise ValueError("ERROR: %s not in %s." % (tag_val, repr(tag_list)))
+
     def get_runtime_context(self, cid):
         return schc_runtime_context(self.get_context(cid))
 
